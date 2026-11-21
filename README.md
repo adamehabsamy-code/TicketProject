@@ -11,8 +11,8 @@ they are added to a waitlist (queue). When a spot opens,
 the first person on the waitlist gets it.
 
 ## Data structure used
-Queue (first in, first out): the first person
-to join the waitlist is the first to get a spot.
+Queue (first in, first out), built ourselves as a
+linked list (no built-in C++ queue).
 
 ## Waitlist features (done)
 - add: add a customer to the waitlist
