@@ -1,5 +1,4 @@
 #include <iostream>
-#include <queue>
 #include <string>
 using namespace std;
 
@@ -11,9 +10,56 @@ public:
     string getName() { return name; }
 };
 
+// Our own queue, built with a linked list
+class Node {
+public:
+    Customer data;
+    Node* next;
+    Node(Customer c) : data(c), next(nullptr) {}
+};
+
+class MyQueue {
+private:
+    Node* head;   // front of the line
+    Node* tail;   // back of the line
+    int count;
+public:
+    MyQueue() { head = nullptr; tail = nullptr; count = 0; }
+
+    ~MyQueue() {
+        while (!empty()) pop();
+    }
+
+    void push(Customer c) {
+        Node* newNode = new Node(c);
+        if (tail == nullptr) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+        count++;
+    }
+
+    void pop() {
+        if (head == nullptr) return;
+        Node* temp = head;
+        head = head->next;
+        if (head == nullptr) tail = nullptr;
+        delete temp;
+        count--;
+    }
+
+    Customer front() { return head->data; }
+    bool empty() { return head == nullptr; }
+    int size() { return count; }
+    Node* getHead() { return head; }
+};
+
 class Waitlist {
 private:
-    queue<Customer> line;
+    MyQueue line;
 public:
     void add(Customer c) {
         line.push(c);
@@ -36,25 +82,25 @@ public:
             cout << "Waitlist is empty" << endl;
             return;
         }
-        queue<Customer> copy = line;
-        int spot = 1;
         cout << "--- Waitlist ---" << endl;
-        while (!copy.empty()) {
-            cout << spot << ". " << copy.front().getName() << endl;
-            copy.pop();
+        int spot = 1;
+        Node* current = line.getHead();
+        while (current != nullptr) {
+            cout << spot << ". " << current->data.getName() << endl;
+            current = current->next;
             spot++;
         }
     }
 
     void position(string name) {
-        queue<Customer> copy = line;
         int spot = 1;
-        while (!copy.empty()) {
-            if (copy.front().getName() == name) {
+        Node* current = line.getHead();
+        while (current != nullptr) {
+            if (current->data.getName() == name) {
                 cout << name << " is #" << spot << " on the waitlist" << endl;
                 return;
             }
-            copy.pop();
+            current = current->next;
             spot++;
         }
         cout << name << " is not on the waitlist" << endl;
@@ -77,5 +123,9 @@ int main() {
     w.next();
     w.next();
     w.next();              // test: empty waitlist
+    w.show();              // test: show empty waitlist
+
+    w.add(Customer("Lina")); // test: add after it was empty
+    w.show();
     return 0;
 }
