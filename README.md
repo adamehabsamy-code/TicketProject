@@ -6,9 +6,10 @@ Data Structures Term Project
 - Lisa: Ticket purchase / reservation
 
 ## What it does
-Customers can buy tickets. If tickets are sold out,
-they are added to a waitlist (queue). When a spot opens,
-the first person on the waitlist gets it.
+Customers can buy tickets for a movie showing. Each showing
+has a set number of seats. If the showing is sold out,
+customers are added to a waitlist (queue). When someone
+cancels, the first person on the waitlist gets the seat.
 
 ## Data structure used
 Queue (first in, first out), built ourselves as a
